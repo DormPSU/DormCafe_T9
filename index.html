@@ -1,13 +1,50 @@
 <!DOCTYPE html>
-
 <html>
-   <head>
-      <meta charset="UTF-8"
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+  <title>PSU Dorm Cafe</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+    #app-frame {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      border: 0;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <iframe id="app-frame"
+    src="https://script.google.com/macros/s/AKfycbysmLV_fOm18AwMDpQVJH5c2K9lXSG7Cvy5d4lJc19Zk-SMgf8_SxyxYMkspC4Sg5fPKQ/exec?table=9">
+  </iframe>
 
-      <title>PSU Dorm Cafe</title>
-   </head>
-   <body>
-      <iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;border: 0;" src="https://script.google.com/macros/s/AKfycbysmLV_fOm18AwMDpQVJH5c2K9lXSG7Cvy5d4lJc19Zk-SMgf8_SxyxYMkspC4Sg5fPKQ/exec?table=9"></iframe>
-   </body>
+  <script>
+    // จุดสำคัญของการแก้ปัญหา: หน้าแม่ (ที่ฝัง iframe) รับรู้การเปิด/ปิดคีย์บอร์ดของ Android ได้
+    // ถูกต้องผ่าน window.visualViewport (ต่างจากหน้าลูกใน iframe ที่มักรับรู้ไม่ได้แม่นยำ)
+    // เราจึงปรับความสูงจริงของ iframe ให้เท่ากับพื้นที่ที่มองเห็นจริงเสมอ
+    // เมื่อ iframe หดตัวลง หน้าเว็บข้างในก็จะคำนวณตำแหน่ง popup/ปุ่มยืนยันได้ถูกต้องตามไปด้วย
+    function resizeFrame() {
+      const frame = document.getElementById('app-frame');
+      const visibleHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      frame.style.height = visibleHeight + 'px';
+    }
+
+    resizeFrame();
+    window.addEventListener('resize', resizeFrame);
+    window.addEventListener('orientationchange', resizeFrame);
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', resizeFrame);
+      window.visualViewport.addEventListener('scroll', resizeFrame);
+    }
+  </script>
+</body>
 </html>
